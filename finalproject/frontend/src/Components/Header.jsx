@@ -19,6 +19,7 @@ export default function Header(props) {
             <nav className="my-2 my-md-0 mr-md-3">
             <Link to="/MyFeed" className="p-2 text-dark">My Feed</Link>
             <Link to="/Messages" className="p-2 text-dark">Messages</Link>
+            <Link to="/Friends" className="p-2 text-dark">Friends</Link>
                 
             </nav>
             {renderUserLink(authenticated, logout)}

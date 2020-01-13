@@ -15,3 +15,15 @@ export function logout() {
 export function getLoggedInUser() {
     return ajax.get('/loggedInUser');
 }
+
+export function getUsers() {
+    return ajax.get('/users')
+}
+
+export function getFriends() {
+    return ajax.get('/friends')
+}
+
+export function addFriend(userId) {
+    return ajax.put('/friend', {userId});
+}

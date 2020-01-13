@@ -1,6 +1,13 @@
 const UserModel = require('../models/users');
+const {db, mongoose} = require('../db');
 
 const uuidv1 = require('uuid/v1');
+const ALLOWED_FIELDS = [
+    'username',
+    'fullname',
+    '_id'
+];
+
 
 function getUserByCredentials(email, password) {
     if (!email || !password) {
@@ -41,6 +48,31 @@ function getUserByAuthorization(authenticationToken) {
     return UserModel.findOne({authenticationToken}).exec();
 }
 
+function getUsersExcludingUser(excludingUser) {
+    return UserModel.find({_id: {$ne: excludingUser._id}}, ALLOWED_FIELDS).limit(10).exec();
+}
+
+// TODO: Obviously this is terrible, a friend should have an option to accept
+function addFriend(user, friendId) {
+    const trueFriendId = mongoose.Types.ObjectId(friendId);
+
+    return Promise.all([
+        UserModel.updateOne({_id: friendId}, { $addToSet: {friends: user._id}}),
+        UserModel.updateOne({_id: user._id}, { $addToSet: {friends: trueFriendId}}),
+    ]);
+}
+
+function getUsersByIds(userIds) {
+    return UserModel.find({ _id: {$in: userIds}}, ALLOWED_FIELDS)
+    .exec();
+}
+
 module.exports = {
-    signUp, getUserByAuthorization, createAuthenticationToken, getUserByCredentials
+    signUp,
+    getUserByAuthorization,
+    createAuthenticationToken,
+    getUserByCredentials,
+    getUsersExcludingUser,
+    addFriend,
+    getUsersByIds,
 };

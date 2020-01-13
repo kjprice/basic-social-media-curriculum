@@ -77,6 +77,11 @@ app.post('/logout', userMiddleware.logout);
 
 app.get('/loggedInUser', userMiddleware.getLoggedInUser);
 
+app.get('/users', userMiddleware.validateUser, userMiddleware.getUsers);
+
+app.get('/friends', userMiddleware.validateUser, userMiddleware.getFriends);
+
+app.put('/friend', userMiddleware.validateUser, userMiddleware.addFriend);
 
 io.on('connection', function(socket){
     messageControls.getAllMessages()

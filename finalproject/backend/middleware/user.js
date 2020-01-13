@@ -77,9 +77,10 @@ function getLoggedInUser(req, res) {
         return res.send({});
     }
 
-    const { username, email, fullname } = user;
+    // handpick things we want
+    const { username, email, fullname, friends } = user;
 
-    return res.send({ user: { username, email, fullname } });
+    return res.send({ user: { username, email, fullname, friends } });
 }
 
 function signUpUser(req, res, next) {
@@ -91,8 +92,55 @@ function signUpUser(req, res, next) {
     .catch((err) => sendError(res, err));
 }
 
+function getUsers(req, res) {
+    const { user } = req;
+    return userControls.getUsersExcludingUser(user)
+    .then((users) => {res.send({users})});
+}
+
+function getFriends(req, res) {
+    const { user } = req;
+    const { friends } = user;
+
+    return userControls.getUsersByIds(friends)
+    .then((friendsList) => {
+        res.send({ friends: friendsList })
+    })
+    .catch(e => sendError(res, e));
+}
+
+function addFriend(req, res) {
+    const { user } = req;
+    const { userId } = req.body;
+
+    return userControls.addFriend(user, userId)
+    .then(() => res.send({success: true}))
+    .catch((e) => sendError(res, e));
+}
+
+function validateUser(req, res, next) {
+    const { user } = req;
+
+    if (user) {
+        return next();
+    }
+
+    sendError(res, 'User Not Found - cannot validate', 401);
+}
 
 function loginUserSuccess(req, res) {
     return res.send({message: 'Login Successful'});
 }
-module.exports = {authenticUserCookie, loginUser, signUpUser, setUserAuthenticationCookie, loginUserSuccess, logout, getLoggedInUser};
+module.exports = {
+    authenticUserCookie,
+    loginUser,
+    signUpUser,
+    setUserAuthenticationCookie,
+    loginUserSuccess,
+    logout,
+    getLoggedInUser,
+    getUsers,
+    getFriends,
+    validateUser,
+    addFriend,
+};

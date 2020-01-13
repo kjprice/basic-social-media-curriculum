@@ -7,19 +7,22 @@ import {
 
 import socketIOClient from "socket.io-client";
 import Messages from './Misc/Messages';
+import Friends from './Misc/Friends';
 import Signin from './Misc/Signin';
 import Header from './Header';
 
 
 import { sendMessage } from '../controllers/messages';
 
-import { signUp, signIn, logout, getLoggedInUser } from '../controllers/users';
+import { signUp, signIn, logout, getLoggedInUser, getFriends, getUsers, addFriend } from '../controllers/users';
+
 const defaultState = {
   response: false,
   user: null,
   authenticated: false,
   // TODO: Change endpoint (run serverside socket.io)
-  endpoint: "http://localhost:4001"
+  endpoint: "http://localhost:4001",
+  contacts: [],
 };
 
 export default class App extends Component {
@@ -32,20 +35,50 @@ export default class App extends Component {
     const { endpoint } = this.state;
     const socket = socketIOClient(endpoint);
     socket.on("messages", (messages) => this.setState({ messages }));
-    this.getLoggedInUser();
+    this.getAuthenticatedInfo();
   }
 
-  getLoggedInUser = () => {
-    getLoggedInUser()
+  getAuthenticatedInfo = () => {
+    return getLoggedInUser()
     .then((response) => {
       const {user} = response.data;
-      if (user && user.username) {
-        this.setState({
-          authenticated: true,
-          user: user,
-        })
+      if (!(user && user.username)) {
+        return;
       }
+
+      this.setState({
+        authenticated: true,
+        user: user,
+        friends: user.friends
+      });
+
+      return Promise.all([
+        // this.getFriends(),
+        this.getUsers(),
+      ]);
     });
+  }
+
+  getUsers = () => {
+    return getUsers()
+    .then((response) => {
+      const { users } = response.data;
+
+      this.setState({
+        users,
+      })
+    })
+  }
+
+  getFriends = () => {
+    return getFriends()
+    .then((response) => {
+      const { friends } = response.data;
+
+      this.setState({
+        friends,
+      })
+    })
   }
 
   sendMessage = (message) => {
@@ -56,7 +89,7 @@ export default class App extends Component {
   signUp = (user) => {
     signUp(user)
     .then(() => {
-      this.getLoggedInUser();
+      this.getAuthenticatedInfo();
     })
     .catch((e) => {
       const { errorMessage } = e.response.data;
@@ -67,8 +100,12 @@ export default class App extends Component {
   signIn = (email, password) => {
     signIn(email, password)
     .then(() => {
-      this.getLoggedInUser();
+      this.getAuthenticatedInfo();
     });
+  }
+
+  addFriend = (userId) => {
+    addFriend(userId).then(this.getFriends);
   }
 
   logout = () => {
@@ -83,11 +120,14 @@ export default class App extends Component {
   }
 
   renderAuthenticatedOptions = () => {
-    const { messages } = this.state;
+    const { messages, friends, users } = this.state;
     return (
       <Switch>
         <Route path="/Messages">
             <Messages messages={messages} sendMessage={this.sendMessage} />
+        </Route>
+        <Route path="/Friends">
+            <Friends addFriend={this.addFriend} friends={friends} users={users} />
         </Route>
         <Route path="/SignIn">
             {this.renderSignIn()}
