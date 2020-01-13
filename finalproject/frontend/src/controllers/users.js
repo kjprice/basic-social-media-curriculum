@@ -1,11 +1,11 @@
 import ajax from '../utils/ajax'
 
-export function signUp(username, password) {
-    return ajax.post('/signUp', {username, password});
+export function signUp(userInfo) {
+    return ajax.post('/signUp', userInfo);
 }
 
-export function signIn(username, password) {
-    return ajax.post('/signIn', {username, password});
+export function signIn(email, password) {
+    return ajax.post('/signIn', {email, password});
 }
 
 export function logout() {

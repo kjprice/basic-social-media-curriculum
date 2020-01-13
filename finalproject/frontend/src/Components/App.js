@@ -39,7 +39,6 @@ export default class App extends Component {
     getLoggedInUser()
     .then((response) => {
       const {user} = response.data;
-      console.log(response)
       if (user && user.username) {
         this.setState({
           authenticated: true,
@@ -54,8 +53,8 @@ export default class App extends Component {
     sendMessage(message)
   }
 
-  signUp = (username, password) => {
-    signUp(username, password)
+  signUp = (user) => {
+    signUp(user)
     .then(() => {
       this.getLoggedInUser();
     })
@@ -65,13 +64,10 @@ export default class App extends Component {
     });
   }
 
-  signIn = (username, password) => {
-    signIn(username, password)
+  signIn = (email, password) => {
+    signIn(email, password)
     .then(() => {
-      // TODO: Get user messages, contacts, wall
-      this.setState({
-        authenticated: true
-      });
+      this.getLoggedInUser();
     });
   }
 

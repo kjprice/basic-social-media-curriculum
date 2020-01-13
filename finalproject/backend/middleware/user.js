@@ -1,3 +1,4 @@
+const { sendError } = require('./misc');
 const userControls = require('../controls/users');
 
 // Authenticate user via cookie
@@ -16,16 +17,10 @@ function authenticUserCookie(req, res, next) {
             req.user = user;
         } else {
             // delete cookie as it is invalid
-            // res.cookie('jwtToken', null);
+            res.cookie('jwtToken', null);
         }
         next();
     });
-}
-
-function sendError(res, error, statusCode = 400) {
-    const errorMessage = error.message ? `Unknown error (${error.message})` : error;
-    res.status(statusCode);
-    res.send({errorMessage})
 }
 
 function setUserAuthenticationCookie(req, res, next) {
@@ -49,12 +44,12 @@ function setUserAuthenticationCookie(req, res, next) {
 
 function loginUser(req, res, next) {
     const userCredentials = req.body;
-    const {username, password} = (userCredentials || {});
-    if (!username || !password) {
+    const {email, password} = (userCredentials || {});
+    if (!email || !password) {
         res.status(400);
         return res.send({'errorMessage': 'Username or password not sent'});
     }
-    return userControls.getUserByCredentials(username, password)
+    return userControls.getUserByCredentials(email, password)
     .then((user) => {
         req.user = user;
     next();
@@ -82,11 +77,22 @@ function getLoggedInUser(req, res) {
         return res.send({});
     }
 
-    return res.send({ user: {username: user.username} });
+    const { username, email, fullname } = user;
+
+    return res.send({ user: { username, email, fullname } });
+}
+
+function signUpUser(req, res, next) {
+    return userControls.signUp(req.body)
+    .then((user) => {
+        req.user = user;
+        next();
+    })
+    .catch((err) => sendError(res, err));
 }
 
 
 function loginUserSuccess(req, res) {
     return res.send({message: 'Login Successful'});
 }
-module.exports = {authenticUserCookie, loginUser, setUserAuthenticationCookie, loginUserSuccess, logout, getLoggedInUser};
+module.exports = {authenticUserCookie, loginUser, signUpUser, setUserAuthenticationCookie, loginUserSuccess, logout, getLoggedInUser};

@@ -48,7 +48,7 @@ const port = process.env.PORT || 4001;
 
 
 const messageControls = require('./controls/messages');
-const userControls = require('./controls/users');
+// const userControls = require('./controls/users');
 
 const db = require('./db');
 
@@ -60,20 +60,6 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
-function sendError(res, error, statusCode = 400) {
-    let errorMessage;
-    if (error.message) {
-        errorMessage =  `Unknown error (${error.message})`;
-    } else if (error.error) {
-        errorMessage = error.error;
-    } else {
-        errorMessage = error;
-    }
-
-    res.status(statusCode);
-    res.send({errorMessage})
-}
-
 // Messages
 app.post('/message', function(req, res) {
     messageControls.sendMessage(req.body)
@@ -83,12 +69,7 @@ app.post('/message', function(req, res) {
 });
 
 // Users
-app.post('/signUp', function(req, res) {
-    userControls.signUp(req.body)
-    .then(() => res.send('success'))
-    // TODO: Show a proper error
-    .catch((err) => sendError(res, err));
-});
+app.post('/signUp', userMiddleware.signUpUser, userMiddleware.setUserAuthenticationCookie, userMiddleware.loginUserSuccess);
 
 app.post('/signIn', userMiddleware.loginUser, userMiddleware.setUserAuthenticationCookie, userMiddleware.loginUserSuccess);
 

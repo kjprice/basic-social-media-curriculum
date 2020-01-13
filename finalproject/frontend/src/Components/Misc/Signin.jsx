@@ -7,12 +7,26 @@ export default class Signin extends Component {
     constructor() {
         super();
 
-        this.state = {};
+        this.state = {
+            formType: 'signin'
+        };
     }
 
     emailChange = (e) => {
         this.setState({
+            email: e.target.value
+        })
+    }
+
+    usernameChange = (e) => {
+        this.setState({
             username: e.target.value
+        })
+    }
+
+    fullNameChange = (e) => {
+        this.setState({
+            fullname: e.target.value
         })
     }
 
@@ -24,14 +38,14 @@ export default class Signin extends Component {
 
     onSubmit = (e) => {
         const {signUp, signIn} = this.props;
-        const {formType, username, password} = this.state;
+        const {formType, username, password, fullname, email} = this.state;
         e.preventDefault(); // Do not let the form post
 
         switch(formType) {
             case 'signup':
-                return signUp(username, password);
+                return signUp({username, password, fullname, email});
             case 'signin':
-                return signIn(username, password);
+                return signIn(email, password);
             default:
                 console.error('Unkown formType', formType);
                 return null; // Not sure what happened here
@@ -65,19 +79,47 @@ export default class Signin extends Component {
         );
     }
 
+    renderSignUpFields = () => {
+        const {formType} = this.state;
+
+        if (formType !== 'signup') {
+            return null;
+        }
+
+        return (
+            <div>
+                <div className="form-group">
+                    <label htmlFor="fullname-input">Full Name</label>
+                    <input type="text" className="form-control" id="fullname-input" aria-describedby="fullname-help" onChange={this.fullNameChange} />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="username-input">Username</label>
+                    <input type="text" className="form-control" id="username-input" onChange={this.usernameChange} />
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const { authenticated } = this.props;
+        const { formType } = this.state;
         if (authenticated) {
             return <Redirect to="/Messages" />
-        } 
+        }
+        const title = (formType === 'signin' ? 'Sign In' : 'Sign Up')
         return (
             <div>
                 <div className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-                    <h1 className="display-4">Sign In</h1>
+                    <h1 className="display-4">{title}</h1>
                 </div>
                 {this.renderSignInError()}
+                <div className="btn-group" role="group" aria-label="Basic example">
+                    <button type="submit" className="btn btn-primary" onClick={this.signInClick}>Sign In</button>
+                    <button type="submit" className="btn btn-secondary" onClick={this.signUpClick}>Sign Up</button>
+                </div>
+
                 <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
+                <div className="form-group">
                         <label htmlFor="exampleInputEmail1">Email address</label>
                         <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={this.emailChange} />
                         <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
@@ -86,10 +128,11 @@ export default class Signin extends Component {
                         <label htmlFor="exampleInputPassword1">Password</label>
                         <input type="password" className="form-control" id="exampleInputPassword1" onChange={this.passwordChange} />
                     </div>
+                    {this.renderSignUpFields()}
                     <div className="btn-group" role="group" aria-label="Basic example">
-                        <button type="submit" className="btn btn-primary" onClick={this.signInClick}>Sign In</button>
-                        <button type="submit" className="btn btn-secondary" onClick={this.signUpClick}>Sign Up</button>
+                        <button type="submit" className="btn btn-primary">Submit</button>
                     </div>
+
                 </form>
             </div>
         )
