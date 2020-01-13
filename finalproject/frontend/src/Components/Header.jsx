@@ -12,7 +12,7 @@ export default function Header(props) {
             <Link to="/Messages" className="p-2 text-dark">Messages</Link>
                 
             </nav>
-            <a className="btn btn-outline-primary" href="#">Sign up</a>
+            <Link to="/SignIn" className="btn btn-outline-primary">Sign in</Link>
         </div>
     )
 }
