@@ -25,7 +25,6 @@ export default class App extends Component {
   }
 
   render() {
-    console.log(this.state);
     const { messages } = this.state;
     return (
         <div style={{ textAlign: "center" }}>

@@ -45,7 +45,6 @@ app.post('/message', function(req, res) {
 io.on('connection', function(socket){
     messageControls.getAllMessages()
     .then(messages => {
-        console.log({messages})
         socket.emit('messages', messages);
     });
     

@@ -10,7 +10,6 @@ function sendMessage(newMessage) {
     if (!newMessage || !newMessage.body) {
         return Promise.reject('No message body sent');
     }
-    console.log({newMessage})
     const message = new MessageModel(newMessage);
 
     return message.save();
