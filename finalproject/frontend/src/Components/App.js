@@ -1,6 +1,15 @@
 import React, { Component } from "react";
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+
 import socketIOClient from "socket.io-client";
 import Messages from './Misc/Messages';
+import Header from './Header';
+
 
 import { sendMessage } from '../controllers/messages';
 
@@ -27,10 +36,15 @@ export default class App extends Component {
   render() {
     const { messages } = this.state;
     return (
-        <div style={{ textAlign: "center" }}>
-          <div>Hello World</div>
-          {messages && <Messages messages={messages} sendMessage={this.sendMessage} />}
-        </div>
+      <div style={{textAlign: 'center'}}>
+        <Header />
+        <Switch>
+          <Route path="/Messages">
+            <Messages messages={messages} sendMessage={this.sendMessage} />
+
+        </Route>
+      </Switch>
+      </div>
     );
   }
 }
