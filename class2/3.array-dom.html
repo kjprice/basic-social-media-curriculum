@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <script>
+            /*
+            * Create an input called "animals"
+            * Create a div called "animals-list"
+            * Listen to "animals", split text by " "
+            * Create a div for each "animal", append to "animals-list"
+            * Clear "animals-list" before appending
+            * Show special message if "dragon" is selected
+            * Look up String.indexOf
+            * Show special message if "cat" is not selected
+            */
+
+            function createHeader() {
+                const header = document.createElement('h1');
+
+                header.innerHTML = 'Favorite Animals';
+                document.body.appendChild(header);
+            }
+
+            function createAnimalsTextBox() {
+                const animalTextBox = document.createElement('input');
+                
+                document.body.appendChild(animalTextBox);
+
+                return animalTextBox;
+            }
+
+            function createAnimalsList() {
+                const animalsList = document.createElement('div');
+
+                document.body.appendChild(animalsList);
+
+                return animalsList;
+            }
+
+            function createSecretMessageContainer() {
+                const secretMessageContainer = document.createElement('div');
+
+                document.body.appendChild(secretMessageContainer);
+
+                return secretMessageContainer;
+            }
+
+            function showSecretAnimalMessage(animalsString, secretMessageContainer) {
+                let message = '';
+                if (animalsString.indexOf('cat') === -1) {
+                    message = 'I hope you like Cats'
+                } else if (animalsString.indexOf('dragon') > -1) {
+                    message = 'You love dragons! How cool!'
+                }
+
+                secretMessageContainer.innerHTML = message;                
+            }
+
+            function showSecretAnimalMessageArray(animalsArray, secretMessageContainer) {
+                let message = '';
+                if (!animalsArray.includes('cat')) {
+                    message = 'I hope you like Cats'
+                } else if (animalsArray.includes('dragon')) {
+                    message = 'You love dragons! How cool!'
+                }
+
+                secretMessageContainer.innerHTML = message;                
+            }
+
+            function displayAnimalText(animalsArray, animalsListContainer) {
+                const animalsListElements = animalsArray.map((animal) => {
+                    const element = document.createElement('div');
+                    element.innerHTML = animal;
+
+                    return element;
+                });
+
+                animalsListContainer.innerHTML = '';
+
+                animalsListElements.forEach((childElement) => {
+                    animalsListContainer.appendChild(childElement);
+                });
+            }
+
+            function init() {
+                createHeader();
+                const animalTextBox = createAnimalsTextBox();
+                const animalsListContainer = createAnimalsList();
+                const secretMessageContainer = createSecretMessageContainer();
+
+                animalTextBox.onkeyup = (event) => {
+                    const animalsString = event.target.value;
+                    const animalsArray = animalsString.toLowerCase().split(' ');
+
+                    displayAnimalText(animalsArray, animalsListContainer);
+                    // showSecretAnimalMessage(animalsString, secretMessageContainer);
+                    showSecretAnimalMessageArray(animalsArray, secretMessageContainer);
+                } 
+            }
+
+            window.onload=init;
+        </script>
+    </head>
+    <body></body>
+</html>

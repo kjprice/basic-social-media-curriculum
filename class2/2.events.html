@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <script>
+            /*
+            * Add event to window.load
+            * Create text element with id=name
+            * onKeyUp, update #message to say "Hello ${name}"
+            * if no text was passed, have "message" be empty
+            * show a secret message for "name"
+            * show a secret message for "name.length"
+            */
+            function init() {
+                console.log('hi');
+                const nameElement = document.querySelector('#name');
+                const messageDiv = document.querySelector('#message');
+                const secretMessageDiv = document.querySelector('#secret-message');
+
+                function someName(someProperties) {}
+                nameElement.onkeyup = someName;
+
+                nameElement.onkeyup = (event) => {
+                    const nameText = event.target.value;
+
+                    const isNumber = isThisANumber(nameText);
+
+                    let message = '';
+
+                    if (!isNumber) {
+                        message = 'This is not a number';
+                    }
+                    // if (nameText !== '') {
+                    //     message = `Hello ${nameText}`;
+                    // }
+
+                    // let secretMessage = '';
+
+                    // if (nameText == 'Nathan') {
+                    //     secretMessage = 'You are a ninja!!!';
+                    // } else if (nameText.length > 9) {
+                    //     secretMessage = '<b>That</b> is a long name';
+                    // }
+
+                    messageDiv.innerHTML = message;
+                    // secretMessageDiv.innerHTML = secretMessage;
+                };
+            }
+
+            function isThisANumber(hopefullyANumber) {
+                return !isNaN(hopefullyANumber)
+            }
+
+            window.onload = init;
+        </script>
+    </head>
+    <body>
+        <input type="text" id="name" />
+
+        <div id="message"></div>
+        <div id="secret-message"></div>
+    </body>
+</html>

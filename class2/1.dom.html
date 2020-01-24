@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <script>
+            /*
+            * 1. Try to selec the element #name in top script (without function)
+            * 2. Move script to bottom of page
+            * 3. Move script back to the top screen, create init() function, pass function to window.onload
+            * 4. Update body.innerHTML
+            */
+            function init() {
+                console.log('hello world');
+
+                // const body = document.querySelector('body');
+                // body.innerHTML = 'yo';
+            }
+            window.onload=init;
+            document.querySelector('#name')
+        </script>
+    </head>
+    <body>
+        <b>Hello</b> World
+        <input type="text" id="name" />
+    </body>
+    <script>
+        function init() {
+            const body = document.querySelector('body');
+            body.innerHTML = '....<b>Hello</b> World!';
+        }
+
+        init();
+    </script>
+</html>
