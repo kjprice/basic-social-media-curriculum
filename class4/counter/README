@@ -1,0 +1,27 @@
+Steps:
+
+A. Create a JSON Object const object = {a: 1, b: 2}. Access using object.a
+
+1. npx create-react-app counter
+2. cd counter/
+3. npm start
+4. create a class called Counter
+5. explain what "class" means -> Like "classification" not "classroom"...Number, Array
+6. create a default "state" property (with count=0)
+7. explain what "state" is, this is how data is stored
+8. display this.state.count, within the render function. The render function must return a single element
+8. create a button
+9. create a function "handleCount" which will be used as a callback - add console.log for testing -> show difference of "= () => {}" and "() {}" in regards to context
+10. Add handleCount to button. This is the same as we pass in window.onload=init
+11. When handleCount is called increment the state property "count"
+12. Create component PageHeader, which displays the prop "count". We do this using "setState" which is an immutable operation
+  a. Describe how imports work
+  b. Explain that Ract has to be imported
+
+13. Within App's render function also create a text box with the text label "What's your name?"
+14. Create a callback function with App called handleNameChange, which will set state.name to the event.target.value value
+15. Assign handleNameChange to the input's "onChange" event
+16. Pass "state.name" to PageHeader as a "name" prop
+17. Within PageHeader, add "Hello {props.name}. "
+18. Within PageHeader, add "You are {props.count} years old :)"
+
