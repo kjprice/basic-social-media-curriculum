@@ -1,0 +1,22 @@
+Steps:
+
+1. Intro to the command line:
+    a. cd
+    b. ls - describe ".", and ".."
+    c. pwd
+    d. say
+    e. node -v
+2. Install Node https://nodejs.org/en/
+3. Explain npm: https://www.npmjs.com/
+4. Create folder class3, npm init
+5. Open node_modules
+6. Install react `npm install react --save`
+7. Open node_modules
+8. delete everything class3
+9.  Run create-react-app https://github.com/facebook/create-react-app
+10. See contents of package.json: npm start
+11. Run npm start
+12. See structure of folder: public (immediately visible to user), src (transpiled stuff)
+13. Explain jsx
+14. Create a sub component called "message"
+
