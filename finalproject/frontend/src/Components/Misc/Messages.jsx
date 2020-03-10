@@ -7,11 +7,20 @@ import React from "react";
 import Message from './Message';
 import SendMessage from './SendMessage';
 
+import {
+    useParams
+} from "react-router-dom";
+
 export default function Messages(props) {
     const {messages, sendMessage} = props;
+    const { userId } = useParams();
+
     if (!messages || !messages.length) {
         return null;
     }
+
+
+    console.log({userId});
     return (
         <div>
             <div className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">

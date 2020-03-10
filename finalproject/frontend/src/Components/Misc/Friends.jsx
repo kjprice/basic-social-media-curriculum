@@ -4,6 +4,10 @@
  *  - We need to assume a user is passed in too
  */
 import React, {Component} from "react";
+import {
+    Link
+  } from "react-router-dom";
+
 // import Message from './Message';
 // import SendMessage from './SendMessage';
 
@@ -14,12 +18,32 @@ export default class Contacts extends Component {
         this.state = {};
     }
 
+    renderFriend = (friend) => {
+        const {_id, fullname, username} = friend;
+        return (
+            <div key={_id} className="col-sm-3">
+                <div className="card">
+                <div className="card-body">
+                    <h5 className="card-title">{username} </h5>
+                    <p className="card-text">{fullname} </p>
+                    <Link to={`/Messages/${_id}`} className="btn btn-primary">Messages</Link>
+                </div>
+                </div>
+            </div>
+        );
+    }
+
     renderFriends = () => {
         const { friends } = this.props;
 
         if (!friends || ! friends.length) {
             return ('It appears you do not have any contacts yet, you can add some below');
         }
+        return (
+            <div className="row">
+                {friends.map((friend) => this.renderFriend(friend))}
+            </div>
+        );
     }
 
     renderUser = (user) => {
@@ -51,7 +75,6 @@ export default class Contacts extends Component {
                 {users.map((user) => this.renderUser(user))}
             </div>
         );
-        return ;
     }
 
     render() {

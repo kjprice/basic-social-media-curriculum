@@ -49,12 +49,12 @@ export default class App extends Component {
       this.setState({
         authenticated: true,
         user: user,
-        friends: user.friends
       });
 
       return Promise.all([
         // this.getFriends(),
         this.getUsers(),
+        this.getFriends()
       ]);
     });
   }
@@ -123,6 +123,9 @@ export default class App extends Component {
     const { messages, friends, users } = this.state;
     return (
       <Switch>
+        <Route path="/Messages/:userId">
+            <Messages messages={messages} sendMessage={this.sendMessage} />
+        </Route>
         <Route path="/Messages">
             <Messages messages={messages} sendMessage={this.sendMessage} />
         </Route>
